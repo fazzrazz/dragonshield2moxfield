@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CSV Converter</title>
+</head>
+<body>
+
+<h1>Upload CSV File</h1>
+<input type="file" id="csvFile">
+<button onclick="processFile()">Convert</button>
+
+<script src="wasm_exec.js"></script>
+<script>
+const go = new Go();
+
+WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
+	go.run(result.instance);
+});
+
+function processFile() {
+	const fileInput = document.getElementById("csvFile");
+	const file = fileInput.files[0];
+
+	const reader = new FileReader();
+	reader.onload = function(e) {
+		const text = e.target.result;
+		const outputCSV = convertCSV(text);
+		// Implement the code to download outputCSV as a file
+	};
+	reader.readAsText(file);
+}
+</script>
+
+</body>
+</html>
